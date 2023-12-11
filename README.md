@@ -52,15 +52,6 @@ This project automates the deployment of a Redis cluster across multiple servers
 - Verify SSH access with the `redis.pem` key and user.
 - Check the network connectivity between master and slave nodes.
 
-## Contributing
-Contributions to the project are welcome. Please submit pull requests for any enhancements or fixes.
-
-## License
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
-
-## Contact
-For support or feedback, please contact [ahmed.i.ibrahim@outlook.com](mailto:ahmed.i.ibrahim@outlook.com).
-
 ## Additional Resources
 For more documentation on Redis and its management, please visit the following resources:
 - [Redis Scaling and Management Documentation](https://redis.io/docs/management/scaling/)
