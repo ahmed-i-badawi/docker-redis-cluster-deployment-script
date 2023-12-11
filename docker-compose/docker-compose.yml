@@ -2,12 +2,11 @@ version: '3.4'
 
 services:
   redis:
-    image: redis
-    #container_name: redis
+    image: redis:latest
     volumes:
       - ./redis.conf:/usr/local/etc/redis/redis.conf
     command: redis-server /usr/local/etc/redis/redis.conf
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
-    restart: always
+    restart: unless-stopped
     network_mode: host

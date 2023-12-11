@@ -1,18 +1,37 @@
 #!/bin/bash
 
-# Define variables
-REMOTE_PATH="~/redis"
-LOCAL_PRIVATE_KEY_PATH="./redis.pem"  # Replace with the path to your private key
+########################################################################
+# start Define variables
 LOCAL_CONF_PATH=docker-compose
-USER="ec2-user"
 TEST_REDIS_PATH="test-redis"
 
+REMOTE_PATH="~/redis" # remote path to deploy in (will be created automatically)
+USER="ec2-user" # you servers user which must be the same for all servers
+LOCAL_PRIVATE_KEY_PATH="./redis.pem"  # Replace with the path to your servers private key which must be the same for all servers
 # Define master and slave (space-separated) nodes using an associative array with ports
+# ex. if we have 10 servers (note: ports don't matter, anything but ports need to be allowed on server)
+# master-1 => 34.194.97.1:7415
+# slave-1 for master-1 => 34.194.97.4:5645
+# slave-2 for master-1 => 34.194.97.5:7899
+
+# master-2 => 34.194.97.2:8456
+# slave-1 for master-2 => 34.194.97.6:5941
+# slave-2 for master-2 => 34.194.97.7:7199
+
+# master-3 => 34.194.97.3:6379
+# slave-1 for master-3 => 34.194.97.8:5941
+# slave-2 for master-3 => 34.194.97.9:7199
+# slave-3 for master-3 => 34.194.97.9:7125
+
+# your MASTERS variable will like this
 declare -A MASTERS=(
-    ["34.194.97.9:6379"]="34.205.236.241:6380 34.238.66.141:6381 54.158.162.62:6379"
-    ["34.205.236.241:6379"]="34.194.97.9:6380 34.238.66.141:6382 54.158.162.62:6380"
-    ["34.238.66.141:6379"]="34.205.236.241:6381 34.194.97.9:6381 54.158.162.62:6381"
+    ["34.194.97.1:7415"]="34.194.97.4:5645 34.194.97.5:7899"
+    ["34.194.97.2:8456"]="34.194.97.6:5941 34.194.97.7:7199"
+    ["34.194.97.3:6379"]="34.194.97.8:5941 34.194.97.9:7199 34.194.97.9:7125"
 )
+
+# End Define variables
+########################################################################
 
 # Function to deploy Docker Compose and redis.conf to a server
 init_deploy() {
