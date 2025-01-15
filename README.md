@@ -1,4 +1,3 @@
-
 # Redis Cluster Deployment Script
 
 ## Overview
@@ -13,6 +12,24 @@ This project automates the deployment of a Redis cluster across multiple servers
 - Access to multiple servers with SSH enabled.
 - Docker and Docker Compose installed on each server.
 - The `redis.pem` private key file for SSH access to the servers.
+
+### Docker Installation Prerequisites
+To install Docker and Docker Compose on the servers, use the following commands:
+```bash
+yum install docker -y && yum install containerd -y
+systemctl start docker && systemctl enable docker
+systemctl start containerd && systemctl enable containerd
+
+sudo curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
+sudo groupadd docker && sudo usermod -aG docker $USER
+newgrp docker
+sudo chown "$USER":"$USER" /home/"$USER"/.docker -R
+sudo chmod g+rwx "$HOME/.docker" -R
+
+sudo yum install expect -y
+```
 
 ## Installation
 1. **Clone the Repository**: Clone this repository to your local machine.
@@ -31,8 +48,24 @@ This project automates the deployment of a Redis cluster across multiple servers
 
 ## Post-Deployment
 - The script automatically sets up the Redis cluster and generates a `startup_nodes_config.py` file for testing.
-- Install the necessary Python library: `pip install redis-py-cluster`.
+- Install the necessary Python library: `pip install redis-py-cluster==2.1.3`.
 - Run the `test-redis.py` Python script in the `test-redis` directory to validate the Redis cluster setup using the command `python3 test-redis.py`.
+
+## Supported Commands
+Below are useful `redis-cli` commands for cluster creation and node management:
+```bash
+# Example 1: Create a cluster with specific nodes
+redis-cli --cluster create redis-1:6379 redis-2:6379 redis-3:6379
+
+# Example 2: Create a cluster with IP addresses and ports
+redis-cli --cluster create 192.168.100.234:6100 192.168.100.234:6200 192.168.100.234:6300
+
+# Example 3: Create a cluster with public IPs and ports (Verify connectivity before using)
+redis-cli --cluster create 54.221.95.77:6379 3.84.114.42:6379 3.87.236.43:6379
+
+# Add a slave node to an existing master node
+redis-cli --cluster add-node 18.215.161.109:6379 54.221.95.77:6379 --cluster-slave
+```
 
 ## Testing the Redis Cluster
 - **Run the Python Test Script**: Execute `test-redis.py`.
@@ -69,4 +102,4 @@ Contributions to the project are welcome. Please submit pull requests for any en
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
 
 ## Contact
-For support or feedback, please contact [ahmed.i.ibrahim@outlook.com](mailto:ahmed.i.ibrahim@outlook.com).
+For support or feedback, please contact [ahmed.i.Badawi@outlook.com](mailto:ahmed.i.Badawi@outlook.com).
